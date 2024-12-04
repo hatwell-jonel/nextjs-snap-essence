@@ -1,0 +1,1 @@
+export const UNPLASH_BASE_URL = "https://api.unsplash.com";
