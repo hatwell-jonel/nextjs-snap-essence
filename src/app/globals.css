@@ -160,6 +160,7 @@ body {
 .download_photo_:hover::before{
   width: 140px;
   transition: .4s ease-in-out;
+  opacity: 1;
   visibility: visible;
 }
 
@@ -180,6 +181,7 @@ body {
   padding-right: 2rem;
   transition: .19s ease-in-out;
   visibility: hidden;
+  opacity: 0;
 }
 
 .download_photo {

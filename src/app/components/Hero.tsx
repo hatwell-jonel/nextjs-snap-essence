@@ -24,11 +24,6 @@ const Hero = () => {
         setRandomImage(selectedImage.src); // Update the state with the random image
     }, []); // This effect runs only once after the component mounts
 
-    if (!randomImage) {
-        // Ensure the component doesn't render until the randomImage is set
-        return null; 
-    }
-
     return (
         <section
             style={{

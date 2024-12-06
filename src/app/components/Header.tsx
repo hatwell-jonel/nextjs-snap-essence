@@ -21,7 +21,7 @@ const Header = () => {
 
     return (
         <header
-            className={`fixed z-[999] top-0 left-[110px] p-3 transition-colors duration-500 ${
+            className={`fixed z-[999] top-0 left-[15%] p-3 transition-colors duration-500 ${
                 isScrolled ? 'bg-white shadow-lg' : 'bg-transparent'
             }`}
         >

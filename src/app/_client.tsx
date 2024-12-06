@@ -4,17 +4,10 @@ import  fetcher from './api/fetcher';
 import Image from 'next/image';
 import Link from 'next/link';
 import { BsCheckCircleFill, BsDownload } from "react-icons/bs";
-
-
-interface UnsplashPhoto {
-    id: string;
-    urls: {
-        small: string;
-        full: string;
-    };
-    alt_description: string | null;
-    // [key: string]: any | undefined; // Optional: Include this if the object has additional unknown fields
-}
+import { downloadImage } from './helpers';
+import Loading from './loading';
+import { useEffect, useState } from 'react';
+import { PhotoResponse } from './lib/types';
 
 export const Gallery = ({...props}) => {
 
@@ -29,12 +22,18 @@ export const Gallery = ({...props}) => {
     const { data: photos, error, isLoading } = useSWR(swrEnpoint(props.query), fetcher);
 
     // Error and loading states
-    if (isLoading) return <p>Loading photos...</p>;
+    if (isLoading) {
+        return (
+            <div className='content_center'>
+                <Loading className="flex items-center justify-center gap-2 mt-10 fw-bold text-center text-4xl" />
+            </div>
+        )
+    };
 
     if (error) return <p>Error loading photos: {error.message}</p>;
 
     return (
-        <main id='gallery' className='border border-red-500 pt-[50px]'>
+        <main id='gallery' className='pt-[50px]'>
             <div className="content_center">
                 <h3>
                     {
@@ -56,12 +55,11 @@ export const Gallery = ({...props}) => {
     )
 }
 
-const Images = ({photos} : {photos}) => {
+const Images = ({photos} : {photos : PhotoResponse}) => {
     return (
         <>
             {
                 photos.map((photo) => {
-                    console.log(photo.user)
                     return (
                         <div className="photo"  key={photo.id}>
                             <div className="owner">
@@ -83,7 +81,7 @@ const Images = ({photos} : {photos}) => {
                                         {
                                             photo.user.for_hire ? (
                                                 <p className="owner_hire">
-                                                   Available for hire <BsCheckCircleFill />
+                                                    Available for hire <BsCheckCircleFill />
                                                 </p>
                                             ) : null
                                         }
@@ -98,7 +96,11 @@ const Images = ({photos} : {photos}) => {
                                 alt={photo.alt_description}
                             />
 
-                            <button type="button" className="download_photo">
+                            <button 
+                                type="button" 
+                                className="download_photo"
+                                onClick={() => downloadImage(photo.urls?.raw)}
+                            >
                                 <BsDownload />
                             </button>
                         </div>
@@ -108,3 +110,58 @@ const Images = ({photos} : {photos}) => {
         </>
     )
 }
+
+
+export const BackToTopButton = () => {
+    const [isVisible, setIsVisible] = useState(false);
+
+    // This ensures that the code below runs only in the browser
+    useEffect(() => {
+        const toggleVisibility = () => {
+        if (window.pageYOffset > 300) {
+            setIsVisible(true);
+        } else {
+            setIsVisible(false);
+        }
+        };
+
+        // Listen to the scroll event and toggle visibility
+        window.addEventListener("scroll", toggleVisibility);
+
+        // Cleanup the event listener on component unmount
+        return () => window.removeEventListener("scroll", toggleVisibility);
+    }, []); // Empty dependency array ensures this effect runs once after mount
+
+    const scrollToTop = () => {
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+        });
+    };
+    
+    if (!isVisible) return null; // Hide the button when not visible
+
+    return (
+        isVisible && (
+        <button
+            onClick={scrollToTop}
+            style={{
+            position: "fixed",
+            bottom: "20px",
+            right: "20px",
+            padding: "10px 20px",
+            borderRadius: "50%",
+            backgroundColor: "#007bff",
+            color: "#fff",
+            border: "none",
+            cursor: "pointer",
+            boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+            fontSize: "18px",
+            }}
+            aria-label="Back to top"
+        >
+            ↑
+        </button>
+        )
+    );
+};

@@ -27,11 +27,6 @@ const SearchInput = () => {
             params.set('q', query);
             router.push(`${pathname}?${params.toString()}`);
         }
-
-        // // Update the URL with the new query
-        // const params = new URLSearchParams(searchParams.toString());
-        // params.set('q', query);
-        // router.push(`${pathname}?${params.toString()}`);
     };
 
     return (
