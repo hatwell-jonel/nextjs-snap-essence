@@ -1,5 +1,5 @@
 # Snap Photography
-[Live Demo](https://snap-photography.vercel.app/)
+[Live Demo](https://nextjs-snap-photography.vercel.app/)
 
 
 ## Preview
