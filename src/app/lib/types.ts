@@ -24,7 +24,7 @@ links: {
 };
 likes: number;
 liked_by_user: boolean;
-current_user_collections: Array<any>;
+current_user_collections: Array<unknown>;
 user: PhotoUser;
 }
 

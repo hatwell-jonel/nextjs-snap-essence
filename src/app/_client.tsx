@@ -7,7 +7,6 @@ import { BsCheckCircleFill, BsDownload } from "react-icons/bs";
 import { downloadImage } from './helpers';
 import Loading from './loading';
 import { useEffect, useState } from 'react';
-import { PhotoResponse } from './lib/types';
 
 export const Gallery = ({...props}) => {
 
@@ -55,62 +54,74 @@ export const Gallery = ({...props}) => {
     )
 }
 
-const Images = ({photos} : {photos : PhotoResponse}) => {
+interface User {
+    username: string;
+    portfolio_url?: string;
+    profile_image?: {
+      medium: string;
+    };
+    for_hire?: boolean;
+  }
+  
+  interface PhotoUrls {
+    regular?: string;
+    full?: string;
+    raw?: string;
+  }
+  
+  interface Photo {
+    id: string;
+    user: User;
+    urls: PhotoUrls;
+    width: number;
+    height: number;
+    alt_description?: string;
+  }
+  
+  interface ImagesProps {
+    photos: Photo[];
+  }
+  
+const Images = ({ photos }: ImagesProps) => {
     return (
         <>
-            {
-                photos.map((photo) => {
-                    return (
-                        <div className="photo"  key={photo.id}>
-                            <div className="owner">
-                                <Link 
-                                    href={photo.user?.portfolio_url ?? ""} 
-                                    className='owner_link' 
-                                    target="_blank"
-                                >
-                                    <Image
-                                        src={photo.user?.profile_image?.medium}
-                                        className='owner_img'
-                                        width={10}
-                                        height={10}
-                                        alt={photo.user?.username}
-                                    />
+        {photos.map((photo) => (
+            <div className="photo" key={photo.id}>
+            <div className="owner">
+                <Link href={photo.user?.portfolio_url ?? ''} className="owner_link" target="_blank">
+                <Image
+                    src={photo.user?.profile_image?.medium || ''}
+                    className="owner_img"
+                    width={10}
+                    height={10}
+                    alt={photo.user?.username || 'Owner Image'}
+                />
+                <div className="owner_info">
+                    <p className="owner_username">{photo.user?.username}</p>
+                    {photo.user?.for_hire && (
+                    <p className="owner_hire">
+                        Available for hire <BsCheckCircleFill />
+                    </p>
+                    )}
+                </div>
+                </Link>
+            </div>
 
-                                    <div className="owner_info">
-                                        <p className="owner_username">{photo.user?.username}</p>
-                                        {
-                                            photo.user.for_hire ? (
-                                                <p className="owner_hire">
-                                                    Available for hire <BsCheckCircleFill />
-                                                </p>
-                                            ) : null
-                                        }
-                                    </div>
-                                </Link>
-                            </div>
+            <Image
+                src={photo.urls?.regular || photo.urls?.full || photo.urls?.raw || ''}
+                width={photo.width}
+                height={photo.height}
+                alt={photo.alt_description || 'Photo'}
+            />
 
-                            <Image
-                                src={photo.urls?.regular || photo.urls?.full || photo.urls?.raw}
-                                width={photo.width}
-                                height={photo.height}
-                                alt={photo.alt_description}
-                            />
-
-                            <button 
-                                type="button" 
-                                className="download_photo"
-                                onClick={() => downloadImage(photo.urls?.raw)}
-                            >
-                                <BsDownload />
-                            </button>
-                        </div>
-                    )
-                })
-            }
+            <button type="button" className="download_photo" onClick={() => downloadImage(photo.urls?.raw || '')}>
+                <BsDownload />
+            </button>
+            </div>
+        ))}
         </>
-    )
-}
-
+    );
+};
 
 export const BackToTopButton = () => {
     const [isVisible, setIsVisible] = useState(false);

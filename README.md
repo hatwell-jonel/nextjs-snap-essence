@@ -1,3 +1,5 @@
+# Snap Photography
+
 ## SWR Syntax and Configuration Options
 
 ### SWR Syntax
