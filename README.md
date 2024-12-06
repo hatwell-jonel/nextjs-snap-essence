@@ -1,4 +1,18 @@
 # Snap Photography
+[Live Demo](https://snap-photography.vercel.app/)
+
+
+## Preview
+![image](./public/preview.png)
+
+## Built with
+    - Next.js 15
+    - React 19
+    - SWR
+    - TypeScript
+    - Tailwind CSS
+    - file-saver
+    - unsplash api
 
 ## SWR Syntax and Configuration Options
 
@@ -140,3 +154,9 @@ useSWR(
 );
 ```
 [SWR documentation](https://swr.vercel.app/) for more details.
+
+## Author
+    - Jonel Hatwell - [LinkedIn](https://www.linkedin.com/in/jonel-hatwell/)
+
+## Acknowledgments
+    - Unsplash API - [Unsplash](https://unsplash.com/)
